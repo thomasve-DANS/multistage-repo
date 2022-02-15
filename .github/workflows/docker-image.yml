@@ -8,6 +8,36 @@ on:
 
 jobs:
 
+  build-image:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Builds an image for caching
+        run: |
+          docker build . --file Dockerfile-image --tag django-test-image:${GITHUB_REF##*/} # Todo: Write separate image file, don't work from Python image.
+          docker login # Set Google registry here.
+          docker push django-test-image:${GITHUB_REF##*/}
+
+  install-project:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Pulls an image from docker
+        run: make image-pull ${GITHUB_REF##*/} # Todo: makefile here to automate these commands.
+
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Pulls an image from docker
+        run: python-manag
+
   build:
 
     runs-on: ubuntu-latest
@@ -15,4 +45,5 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build . --file Dockerfile --tag django-test-image:${GITHUB_REF##*/}
+
