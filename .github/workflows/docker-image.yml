@@ -40,5 +40,4 @@ jobs:
           virtualenvs-path: ~/my-custom-path
           installer-parallel: true
       - run: poetry install --no-root
-      - run: poetry shell
       - run: python -m pytest
