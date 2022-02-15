@@ -16,7 +16,7 @@ jobs:
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
-  Show-parallel-steps:
+  Linter:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Some steps can run in parallel, like this."
@@ -27,6 +27,7 @@ jobs:
 
   Test:
     runs-on: ubuntu-latest
+    needs: Linter
     steps:
       - run: echo "Some steps can run in parallel, like this."
       - name: Check out repo code
